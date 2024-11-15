@@ -1,0 +1,5 @@
+Source:
+DWD Station Number:    3946  N 50.4818   E 12.1300
+Monthly Temperature and soil moisture (PAW) data from DWD: http://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/monthly 
+TXK used (daily maximum temperature at 2m height)
+Air Quality (PM10) from European Environmental Agency: https://eeadmz1-downloads-webapp.azurewebsites.net/
