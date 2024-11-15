@@ -1,0 +1,35 @@
+# Load necessary libraries
+library(readr)
+library(dplyr)
+library(lubridate)
+
+plot(MAX_TEMP ~ PM10, data = Plauen_AirQ)
+
+#Correlating the max temp with PM10 and excluding any NA values
+cor(Plauen_AirQ$MAX_TEMP, Plauen_AirQ$PM10, use = "complete.obs")
+
+#Plotting all the variables within the Plauen_AirQ against each other
+plot(Plauen_AirQ)
+
+#Check distribution over years
+plot(Plauen_AirQ_PAW_T$Date ~ Plauen_AirQ_PAW_T$PM10)
+
+#find weekday
+Plauen_AirQ$WeekDay <- wday(Plauen_AirQ$Date, week_start = 7) 
+
+#find correlation if weekday is 1 (Sunday)
+cor(Plauen_AirQ$AVG_TEMP[Plauen_AirQ$Week_Day == 1], Plauen_AirQ$PM2.5[Plauen_AirQ$Week_Day == 1], use = "complete.obs")
+
+#Plotting correlation
+plot(AVG_TEMP[Plauen_AirQ$Week_Day == 1] ~ PM2.5[Plauen_AirQ$Week_Day == 1], data = Plauen_AirQ)
+
+Plauen_AirQ$Month <- format(Plauen_AirQ$Date, "%Y-%m")
+Plauen_AirQ_SM_T <- merge(Plauen_AirQ, Plauen_PAW_60, by = "Month_Year", all = TRUE)
+
+#Create a csv file from data frame
+write.csv(Plauen_AirQ_SM_T, file = "Plauen_AirQ_PAW_T.csv")
+
+#Create subset for weekday (1) and PAW<46.04; do the same for each week day
+subset_df <- Plauen_AirQ_SM_T[Plauen_AirQ_SM_T$PAW < 46.04& Plauen_AirQ_SM_T$Week_Day == 1, ]
+plot(subset_df$AVG_TEMP ~ subset_df$PM10, data = subset_df)
+cor.test(subset_df$AVG_TEMP, subset_df$PM10, use = "complete.obs", method = "spearman")
