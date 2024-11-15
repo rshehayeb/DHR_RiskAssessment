@@ -1,0 +1,76 @@
+library(raster)
+library(terra)
+install.packages("raster")
+install.packages("rgdal", type = "source")
+install.packages("graphics")
+
+#1 Normalizing required rasters into 1-5 scale
+
+  # Read the input rasters "xxxx"
+
+R352 <- raster("C:/R_TOPSIS_Plauen/TOPSIS_Plauen/Indicator_rasters/CO2_Flux_2015_HP.tif")
+R361 <- raster("C:/R_TOPSIS_Plauen/TOPSIS_Plauen/Indicator_rasters/Net_Tv_Ta_04072015_1400_512cm_HP.tif")
+C3121 <- raster("C:/R_TOPSIS_Plauen/TOPSIS_Plauen/Indicator_rasters/UTCI_HP_04072015_1400.tif")
+
+  # normalization equation: NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+Norm_R352 <- (1+(((R352 + 1.013)/(0.126 + 1.013))*(5-1)))
+Norm_R361 <- (1+(((R361 + 5.57)/(12.06 + 5.57))*(5-1)))
+Norm_C3121 <- (1+(((C3121 - 26)/(46 - 26))*(5-1)))
+
+
+  # Write the result to "Norm_xxxx.tiff"
+writeRaster(Norm_R352, filename = "Norm_CO2_Flux.tiff", format = "GTiff", overwrite = TRUE)
+writeRaster(Norm_R361, filename = "Norm_Tv_Ta_512cm.tiff", format = "GTiff", overwrite = TRUE)
+writeRaster(Norm_C3121, filename = "Norm_UTCI.tiff", format = "GTiff", overwrite = TRUE)
+
+#2 calculate the relative closeness for indicators
+
+  #Read rasters
+Norm_P333 <- raster("C:/R_TOPSIS_Plauen/TOPSIS_Plauen/Indicator_rasters/Norm_WaterProtec_Risk.tif")
+Norm_R351 <- raster("C:/R_TOPSIS_Plauen/TOPSIS_Plauen/Indicator_rasters/Norm_SpearmanCoef_Risk.tif")
+Norm_R352 <- raster("C:/R_TOPSIS_Plauen/TOPSIS_Plauen/Indicator_rasters/Norm_CO2_Flux_HP.tiff")
+Norm_R361 <- raster("C:/R_TOPSIS_Plauen/TOPSIS_Plauen/Indicator_rasters/Norm_Tv_Ta_512cm.tiff")
+Norm_R371 <- raster("C:/R_TOPSIS_Plauen/TOPSIS_Plauen/Indicator_rasters/Norm_SoiltextureRisk.tif")
+Norm_C3111 <- raster("C:/R_TOPSIS_Plauen/TOPSIS_Plauen/Indicator_rasters/Norm_AccessToSapce_Risk.tif")
+Norm_C3113 <- raster("C:/R_TOPSIS_Plauen/TOPSIS_Plauen/Indicator_rasters/Norm_AccessToWater_Risk.tif")
+Norm_C3114 <- raster("C:/R_TOPSIS_Plauen/TOPSIS_Plauen/Indicator_rasters/Norm_ShadedAreaRisk.tif")
+Norm_C3121 <- raster("C:/R_TOPSIS_Plauen/TOPSIS_Plauen/Indicator_rasters/Norm_UTCI.tiff")
+
+  #Adjust coordinates and resolutions into one (referance: Norm_R351)
+Norm_P333_r <- projectRaster(Norm_P333, Norm_R351, method = 'bilinear')
+Norm_R352_r <- projectRaster(Norm_R352, Norm_R351, method = 'bilinear')
+Norm_R361_r <- projectRaster(Norm_R361, Norm_R351, method = 'bilinear')
+Norm_R371_r <- projectRaster(Norm_R371, Norm_R351, method = 'bilinear')
+Norm_C3111_r <- projectRaster(Norm_C3111, Norm_R351, method = 'bilinear')
+Norm_C3113_r <- projectRaster(Norm_C3113, Norm_R351, method = 'bilinear')
+Norm_C3114_r <- projectRaster(Norm_C3114, Norm_R351, method = 'bilinear')
+Norm_C3121_r <- projectRaster(Norm_C3121, Norm_R351, method = 'bilinear')
+
+  #calculate the weighted indicators
+Norm_P333_w <- Norm_P333_r*1
+Norm_R351_w <- Norm_R351*0.1429
+Norm_R352_w <- Norm_R352_r*0.5714
+Norm_R361_w <- Norm_R361_r*0.1429
+Norm_R371_w <- Norm_R371_r*0.1429
+Norm_C3111_w <- Norm_C3111_r*0.1667
+Norm_C3113_w <- Norm_C3113_r*0.1667
+Norm_C3114_w <- Norm_C3114_r*0.25
+Norm_C3121_w <- Norm_C3121_r*0.4167
+
+  #calculate separation measures Si+ and Si- for each ES dimension
+S_P1_Pos <- sqrt((Norm_P333_w-1)^2)
+S_P1_Neg <- sqrt((Norm_P333_w-5)^2)
+S_R1_Pos <- sqrt(((Norm_R351_w-0.1429)^2)+((Norm_R352_w-0.5714)^2)+((Norm_R361_w-0.1429)^2)+((Norm_R371_w-0.1429)^2))
+S_R1_Neg <- sqrt(((Norm_R351_w-0.7143)^2)+((Norm_R352_w-2.8571)^2)+((Norm_R361_w-0.7143)^2)+((Norm_R371_w-0.7143)^2))
+S_C1_Pos <- sqrt(((Norm_C3111_w-0.1667)^2)+((Norm_C3113_w-0.1667)^2)+((Norm_C3114_w-0.25)^2)+((Norm_C3121_w-0.4167)^2))
+S_C1_Neg <- sqrt(((Norm_C3111_w-0.8333)^2)+((Norm_C3113_w-0.8333)^2)+((Norm_C3114_w-1.25)^2)+((Norm_C3121_w-2.0833)^2))
+
+  #Calculate the relative closeness Pi+ and Pi- for each ES dimension
+P_P1_Pos <- S_P1_Neg/(S_P1_Neg+S_P1_Pos)
+P_R1_Pos <- S_R1_Neg/(S_R1_Neg+S_R1_Pos)
+P_C1_Pos <- S_C1_Neg/(S_C1_Neg+S_C1_Pos)
+  
+  # Write the results
+writeRaster(P_P1_Pos, filename = "Rel_Closeness_Prov1.tiff", format = "GTiff", overwrite = TRUE)
+writeRaster(P_R1_Pos, filename = "Rel_Closeness_Reg1.tiff", format = "GTiff", overwrite = TRUE)
+writeRaster(P_C1_Pos, filename = "Rel_Closeness_Cult1.tiff", format = "GTiff", overwrite = TRUE)
