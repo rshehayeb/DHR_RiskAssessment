@@ -1,0 +1,36 @@
+# Load necessary libraries
+library(readr)
+library(dplyr)
+library(lubridate)
+
+# Extract the day of the year from the "Date" column
+Plauen_Temp$Day <- yday(Plauen_Temp$Date)
+
+# Calculate the 90th percentile of daily temperature for each day of the year
+Plauen_T_Percentile <- Plauen_Temp %>%
+  group_by(Day) %>%
+  summarise(Percentile90 = quantile(Max_Daily_Temp_C, 0.9, na.rm = TRUE))
+
+# Join the "Plauen_Temp" and "Plauen_T_Percentile" tables based on the "Day" column
+Plauen_Temp <- left_join(Plauen_Temp, Plauen_T_Percentile, by = "Day")
+
+# Add the "Exceeds" column
+Plauen_Temp$Exceeds <- ifelse(Plauen_Temp$Max_Daily_Temp_C > Plauen_Temp$Percentile90, "Y", 
+                              ifelse(is.na(Plauen_Temp$Max_Daily_Temp_C), "NA", "N"))
+
+# Add the "HeatWave" column
+Plauen_Temp$HeatWave <- ifelse((Plauen_Temp$Exceeds == "Y") & 
+                                 (((lag(Plauen_Temp$Exceeds) == "Y") & (lead(Plauen_Temp$Exceeds) == "Y")) 
+                               | ((lag(Plauen_Temp$Exceeds, 2) == "Y") & (lag(Plauen_Temp$Exceeds) == "Y"))
+                               | ((lead(Plauen_Temp$Exceeds, 2) == "Y") & (lead(Plauen_Temp$Exceeds) == "Y"))), "HW", "")
+
+# To count the number of values exceeding 32°C
+count <- sum(Plauen_T_Percentile$Percentile95 > 32, na.rm = TRUE)
+
+# Print the count
+print(count)
+
+# Calculate the 99.8th percentile (Return Period: 500 days) of the daily temperature for all considered days
+Plauen_T_Percentile <- Plauen_Temp %>%
+summarise(Percentile99.8 = quantile(Max_Daily_Temp_C, 0.998, na.rm = TRUE))
+
