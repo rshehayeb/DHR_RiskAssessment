@@ -1,0 +1,63 @@
+// Field Measurement Code
+#include <SPI.h>
+#include <SD.h>
+#define MAX_RAW_VALUE 594u // for voltage ca. 2.9V
+#define MIN_HUMIDITY_VALUE 14u // 100 - (482/594 *100) dry conditions after reverse
+#define MAX_HUMIDITY_VALUE 68u // 100 - (196/594 *100) wet conditions after reverse
+const int chipSelect = 4;
+uint16_t readHumidity() {
+  // Read “dryness” (low values indicate soil moisture).
+  // Actually in the value range [0..1023], but as it is a 3.3V sensor,
+  // we expect (minus approx. 0.4V loss) [0..MAX_RAW_VALUE]
+  uint16_t dryness = analogRead(A0);
+
+  // Limit values greater than MAX_RAW_VALUE
+  dryness = min(dryness, MAX_RAW_VALUE);
+  
+  // Convert to % range [0..100] and convert “dryness” to “humidity”
+  uint16_t humidity = map(dryness, 0, MAX_RAW_VALUE, 100, 0);
+  
+  // Exclude values outside [MIN_HUMIDITY_VALUE..MAX_HUMIDITY_VALUE]
+  humidity = constrain(humidity, MIN_HUMIDITY_VALUE, MAX_HUMIDITY_VALUE);
+  
+  // Convert to % range [0..100] again
+  humidity = map(humidity, MIN_HUMIDITY_VALUE, MAX_HUMIDITY_VALUE, 0, 100); //  returns (Humidity - Min_Humidity) * (100 - 0) / (Max_Humidity - Min_Humidity) + 0
+  
+  return humidity;
+}
+
+void setup() {
+  pinMode(A0, INPUT);
+  Serial.begin(9600);
+  Serial.print("Initializing SD card...");
+
+  // see if the card is present and can be initialized:
+  if (!SD.begin(chipSelect)) {
+    Serial.println("Card failed, or not present");
+    // don't do anything more:
+    while (1);
+  }
+  Serial.println("card initialized.");
+}
+
+void loop() {
+  String dataString = String("Soil Humidity: ") + String(readHumidity()) + String(" %"); // define the string file for reading data
+  
+  // create & open file. note that only one file can be open at a time,
+  // so you have to close this one before opening another.
+  File dataFile;
+  dataFile = SD.open("Humidity.txt", FILE_WRITE);
+
+  // if the file is available, write to it:
+  if (dataFile) {
+    dataFile.println(dataString);
+    dataFile.close();
+    // print to the serial port too:
+    Serial.println(dataString);
+  }
+  // if the file isn't open, pop up an error:
+  else {
+    Serial.println("error opening Humidity.txt");
+  }
+  delay(3000);
+}
