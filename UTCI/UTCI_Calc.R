@@ -1,0 +1,12 @@
+# Load necessary libraries
+library(readr)
+library(dplyr)
+library(lubridate)
+library(ClimInd)
+
+
+UTCI_Plauen_04072015_1400$UTCI <- utci(ta=UTCI_Plauen_04072015_1400$AirT, rh=UTCI_Plauen_04072015_1400$rh, w=UTCI_Plauen_04072015_1400$Wind, tmrt = UTCI_Plauen_04072015_1400$MRT, data_names = UTCI_Plauen_04072015_1400$Point)
+print(UTCI_Plauen_04072015_1400)
+
+write.csv(UTCI_Plauen_04072015_1400, file = "UTCI_Full_04072015_1400.csv")
+
