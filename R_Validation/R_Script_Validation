@@ -1,0 +1,26 @@
+# Load necessary library
+library(readr)
+
+# Read data from CSV files
+T_Results <- read_csv("C:/R_Validation/Validation_ENVImet.csv")
+
+# Assuming the temperature data is in a column named 'temperature'
+T_Model <- T_Results$T_Model
+T_Device <- T_Results$T_Device
+
+# Perform the Mann-Whitney U test
+MWU_Test <- wilcox.test(T_Model, T_Device)
+
+# Mean Absolute Error (MAE)
+absolute_errors <- abs(T_Model - T_Device)
+mae <- mean(absolute_errors)
+
+# Root mean squared error (RMSE)
+squared_errors <- (T_Model - T_Device)^2
+mse <- mean(squared_errors)  #mean squared error
+rmse <- sqrt(mse)  #root mean squared error
+
+# Print test results
+print(MWU_Test) # not used, not applicable
+print(mae)
+print(rmse)
