@@ -19,7 +19,7 @@ plot(Plauen_AirQ_PAW_T$Date ~ Plauen_AirQ_PAW_T$PM10)
 Plauen_AirQ_2005_2024$WeekDay <- wday(Plauen_AirQ_2005_2024$Date, week_start = 7) 
 
 #find correlation if weekday is 1 (Sunday)
-cor(Plauen_AirQ$AVG_TEMP[Plauen_AirQ$Week_Day == 4], Plauen_AirQ$PM2.5[Plauen_AirQ$Week_Day == 4], use = "complete.obs")
+cor(Plauen_AirQ$AVG_TEMP[Plauen_AirQ$Week_Day == 1], Plauen_AirQ$PM2.5[Plauen_AirQ$Week_Day == 1], use = "complete.obs")
 
 #Plotting correlation
 plot(AVG_TEMP[Plauen_AirQ$Week_Day == 1] ~ PM2.5[Plauen_AirQ$Week_Day == 1], data = Plauen_AirQ)
@@ -40,7 +40,7 @@ cor(Plauen_AirQ_SM_T$MAX_TEMP[Plauen_AirQ_SM_T$PAW < 70],Plauen_AirQ_SM_T$PM2.5[
 #Find correlation if Plant Available Water (PAW) is less than 70 and weekday is 1
 cor(PL_AirQ_PAW_T_v3$Max_Daily_Temp_C[PL_AirQ_PAW_T_v3$PAW_60cm < 51.58 & PL_AirQ_PAW_T_v3$WeekDay == 1],PL_AirQ_PAW_T_v3[PL_AirQ_PAW_T_v3$PAW_60cm < 51.58 & PL_AirQ_PAW_T_v3$WeekDay == 1], use = "complete.obs" )
 
-#Create subset for weekday (1) and PAW<50
+#Create subset for weekday (1) and PAW<51.58
 subset_df <- PL_AirQ_PAW_T_v3[PL_AirQ_PAW_T_v3$PAW_60cm < 51.58 & PL_AirQ_PAW_T_v3$WeekDay == 6, ]
 plot(subset_df$Max_Daily_Temp_C ~ subset_df$PM10, data = subset_df)
 cor.test(subset_df$Max_Daily_Temp_C, subset_df$PM10, use = "complete.obs", method = "spearman")
