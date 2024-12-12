@@ -23,6 +23,7 @@ cor(Plauen_AirQ$AVG_TEMP[Plauen_AirQ$Week_Day == 1], Plauen_AirQ$PM2.5[Plauen_Ai
 #Plotting correlation
 plot(AVG_TEMP[Plauen_AirQ$Week_Day == 1] ~ PM2.5[Plauen_AirQ$Week_Day == 1], data = Plauen_AirQ)
 
+#Merging the PAW with AirQ and AirT
 Plauen_AirQ$Month <- format(Plauen_AirQ$Date, "%Y-%m")
 Plauen_AirQ_SM_T <- merge(Plauen_AirQ, Plauen_PAW_60, by = "Month_Year", all = TRUE)
 
