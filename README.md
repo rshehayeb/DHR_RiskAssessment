@@ -1,5 +1,5 @@
 # DHR_RiskAssessment
-Contains R and Arduino code used in the drought and heat risk assessment for ecosystem services of Hammer park, Plauen, Germany.
+Contains R and Arduino code used in the drought and heat risk assessment for urban green infrastructure and ecosystem services of Hammer park, Plauen, Germany.
 Arduino version 2.3.2;
 R-script version 4.4.1
 
@@ -7,7 +7,7 @@ R-script version 4.4.1
 The code calibrates and programs the Arduino UNO Microcontroller connected to the sensor to measure the plant available water based on the soil charge storing capacity.
 Reference: 
 
-2. Air Quality Code (R_AirQ):
+2. Air Quality Correlation Code (R_AirQ):
 The code analyzes the (Spearman) correlation between the air quality (PM10) and air temperature, under a certain water availability.
 Reference:
 
