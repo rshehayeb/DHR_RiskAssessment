@@ -1,5 +1,5 @@
 # Load necessary library
-library(readr)
+if(!require(readr)) install.packages('readr')
 
 # Read data from CSV files
 T_Results <- read_csv("C:/R_Validation/Validation_ENVImet.csv")
