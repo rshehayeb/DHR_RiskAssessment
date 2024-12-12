@@ -1,10 +1,10 @@
 # Prepare necessary data (Air temperature, relative humidity, wind velocity, mean radiant temperature) in a spreadsheet “UTCI_Plauen_04072015_1400”.
 Script:
 # Load necessary libraries
-library(readr)
-library(dplyr)
-library(lubridate)
-library(ClimInd)
+if(!require(readr)) install.packages('readr')
+if(!require(dplyr)) install.packages('dplyr') 
+if(!require(lubridate)) install.packages('lubridate')
+if(!require(ClimInd)) install.packages(‘ClimInd’)
 
 # Calculate the UTCI
 UTCI_Plauen_04072015_1400$UTCI <- utci(ta=UTCI_Plauen_04072015_1400$AirT, rh=UTCI_Plauen_04072015_1400$rh, w=UTCI_Plauen_04072015_1400$Wind, tmrt = UTCI_Plauen_04072015_1400$MRT, data_names = UTCI_Plauen_04072015_1400$Point)
