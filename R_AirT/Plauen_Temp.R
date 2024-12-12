@@ -1,7 +1,7 @@
 # Load necessary libraries
-library(readr)
-library(dplyr)
-library(lubridate)
+if(!require(readr)) install.packages('readr')
+if(!require(dplyr)) install.packages('dplyr') 
+if(!require(lubridate)) install.packages('lubridate')
 
 
 # Extract the day of the year from the "Date" column
