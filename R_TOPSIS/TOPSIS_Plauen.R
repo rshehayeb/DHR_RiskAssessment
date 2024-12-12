@@ -1,8 +1,7 @@
-library(raster)
-library(terra)
-install.packages("raster")
-install.packages("rgdal", type = "source")
-install.packages("graphics")
+if(!require(raster)) install.packages(“raster”)
+if(!require(rgdal)) install.packages("rgdal", type = "source")
+if(!require(readr)) install.packages(“graphics”)
+
 
 #1 Normalizing required rasters into 1-5 scale
 
