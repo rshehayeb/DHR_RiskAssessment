@@ -1,5 +1,5 @@
 # DHR_RiskAssessment
-Contains R and Arduino code used in the drought and heat risk assessment for urban green infrastructure and ecosystem services of Hammer park, Plauen, Germany.
+Contains R and Arduino code used in the drought and heat risk assessment for urban green infrastructure and ecosystem services of Hammer park, Plauen, Germany. The code is highlighted as part of the data flowchart of the risk assessment (below).
 Arduino version 2.3.2;
 R-script version 4.4.1
 
@@ -27,3 +27,4 @@ Reference: [Zenodo DOI]
 The code applies statistical methods of Mean Absolute Error and Root Mean Squared Error to validate the ENVI-met air temperature output at several spatial locations.
 Reference: [Zenodo DOI]
    
+![DataFlowChart_HighlightCode](https://github.com/user-attachments/assets/ffe900eb-31c5-4168-bcab-984ed49b65d7)
