@@ -26,5 +26,7 @@ Reference: [Zenodo DOI]
 10. ENVI-met data validation Code (R_Validation):
 The code applies statistical methods of Mean Absolute Error and Root Mean Squared Error to validate the ENVI-met air temperature output at several spatial locations.
 Reference: [Zenodo DOI]
-   
-![DataFlowChart_HighlightCode](https://github.com/user-attachments/assets/ffe900eb-31c5-4168-bcab-984ed49b65d7)
+
+![DataFlowChart_HighlightCode](https://github.com/user-attachments/assets/36225ee1-f8f8-47a7-90ae-fce5ea2448a3)
+
+
