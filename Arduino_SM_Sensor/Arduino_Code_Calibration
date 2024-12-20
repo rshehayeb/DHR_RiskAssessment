@@ -1,11 +1,13 @@
-//Calibration Code:
+// Calibration Code: Reads analog input values from pin A0 and prints them to the Serial Monitor.
+
 void setup() {
-  pinMode(A0, INPUT);
-  Serial.begin(9600);
+  pinMode(A0, INPUT);        // Configure pin A0 as an input to read analog signals.
+  Serial.begin(9600);        // Initialize serial communication at a baud rate of 9600.
 }
 
 void loop() {
-  Serial.println(String("Value: ") + String(analogRead(A0)));
-  delay(2000);
+  // Read the analog value from pin A0, convert it to a string, and print it to the Serial Monitor.
+  Serial.println(String("Value: ") + String(analogRead(A0))); 
+  
+  delay(2000);               // Wait for 2 seconds before reading the next value.
 }
-
