@@ -1,4 +1,4 @@
-# Drought Heat Risk(DHR) Assessment
+# Drought Heat Risk (DHR) Assessment
 This repository contains R and Arduino code used in the drought and heat risk assessment for urban green infrastructure and ecosystem services of Hammer park, Plauen, Germany. The code is highlighted in orange as part of the data flowchart of the risk assessment (below).
 Arduino version 2.3.2;
 R-script version 4.4.1
