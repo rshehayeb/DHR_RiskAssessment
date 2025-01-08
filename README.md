@@ -27,6 +27,8 @@ Reference: [Zenodo DOI]
 The code applies statistical methods of Mean Absolute Error and Root Mean Squared Error to validate the ENVI-met air temperature output at several spatial locations.
 Reference: [Zenodo DOI]
 
+Data flow description, abbreviations, and acronyms: [Zenodo DOI]
+
 ![DataFlowChart_HighlightCode](https://github.com/user-attachments/assets/36225ee1-f8f8-47a7-90ae-fce5ea2448a3)
 
 
