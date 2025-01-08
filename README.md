@@ -16,7 +16,7 @@ The code analyzes the historic air temperature to calculate the temperature valu
 Reference: [Zenodo DOI]
 
 6. TOPSIS Code (R_TOPSIS):
-The code normalizes the different indicators, and aggregates them based on specific weights into three indices.
+The code normalizes the different indicators, and aggregates them based on specific weights into three indices. Technique for Order Preference by Similarity to Ideal Solution (TOPSIS) is a multi-criteria evaluation method.
 Reference: [Zenodo DOI]
 
 8. Universal Themal Climate Index Code (R_UTCI):
